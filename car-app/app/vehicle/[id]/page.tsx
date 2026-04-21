@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 
 const countryFlag: { [key: string]: string } = {
@@ -6,14 +6,25 @@ const countryFlag: { [key: string]: string } = {
   'イギリス': '🇬🇧', 'アメリカ': '🇺🇸', 'フランス': '🇫🇷', 'スウェーデン': '🇸🇪'
 }
 
-export default async function VehiclePage(props: any) {
-  const id = props.params.id
-  const { data: v } = await supabase.from('vehicles').select('*').eq('id', id).single()
+export default async function VehiclePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
 
-  if (!v) return (
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
+  const { data: v, error } = await supabase
+    .from('vehicles')
+    .select('*')
+    .eq('id', id)
+    .single()
+
+  if (error || !v) return (
     <div className="min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center">
       <div className="text-center">
         <p className="text-2xl mb-4">車両が見つかりません</p>
+        <p className="text-gray-500 text-sm mb-4">ID: {id}</p>
         <Link href="/" className="text-[#C9A84C]">← トップへ戻る</Link>
       </div>
     </div>
