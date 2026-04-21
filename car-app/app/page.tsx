@@ -1,14 +1,19 @@
 import { supabase } from '@/lib/supabase'
 
-const vehicleImages: { [key: string]: string } = {
-  'フェラーリ 250 GTO': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/1962_Ferrari_250_GTO_%2836705665064%29.jpg/320px-1962_Ferrari_250_GTO_%2836705665064%29.jpg',
-  'トヨタ 2000GT': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Toyota_2000GT_-_Flickr_-_exfordy.jpg/320px-Toyota_2000GT_-_Flickr_-_exfordy.jpg',
-  'メルセデス・ベンツ 300SL': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/1955_Mercedes-Benz_300SL_Gullwing_Coupe_34_front.jpg/320px-1955_Mercedes-Benz_300SL_Gullwing_Coupe_34_front.jpg',
-  'ポルシェ 911（930）ターボ': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Porsche_930_Turbo_3.3.jpg/320px-Porsche_930_Turbo_3.3.jpg',
-  'ランボルギーニ ミウーラ': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lamborghini_Miura_-_Flickr_-_Alexandre_Pr%C3%A9vot_%281%29.jpg/320px-Lamborghini_Miura_-_Flickr_-_Alexandre_Pr%C3%A9vot_%281%29.jpg',
-  'ジャガー Eタイプ': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Jaguar_E-Type_Series_I_3.8_Roadster.jpg/320px-Jaguar_E-Type_Series_I_3.8_Roadster.jpg',
-  '日産 スカイライン GT-R（KPGC10）': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Nissan_Skyline_2000GT-R_%28KPGC10%29_01.jpg/320px-Nissan_Skyline_2000GT-R_%28KPGC10%29_01.jpg',
-  'アルファ・ロメオ ジュリア スプリント GTA': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Alfa_Romeo_Giulia_GTA_-_Flickr_-_Alexandre_Pr%C3%A9vot.jpg/320px-Alfa_Romeo_Giulia_GTA_-_Flickr_-_Alexandre_Pr%C3%A9vot.jpg',
+const countryFlag: { [key: string]: string } = {
+  'イタリア': '🇮🇹', '日本': '🇯🇵', 'ドイツ': '🇩🇪',
+  'イギリス': '🇬🇧', 'アメリカ': '🇺🇸', 'フランス': '🇫🇷', 'スウェーデン': '🇸🇪'
+}
+
+const vehicleEmoji: { [key: string]: string } = {
+  'フェラーリ 250 GTO': '🔴',
+  'トヨタ 2000GT': '⚪',
+  'メルセデス・ベンツ 300SL': '⚫',
+  'ポルシェ 911（930）ターボ': '🟡',
+  'ランボルギーニ ミウーラ': '🟠',
+  'ジャガー Eタイプ': '🟢',
+  '日産 スカイライン GT-R（KPGC10）': '⚪',
+  'アルファ・ロメオ ジュリア スプリント GTA': '🔴',
 }
 
 async function getVehicles() {
@@ -30,20 +35,14 @@ export default async function Home() {
       </header>
       <div className="max-w-6xl mx-auto p-6">
         <h2 className="text-xl font-bold text-white mb-6">🏆 評価指数トップ {vehicles.length}</h2>
-        <div className="grid gap-6">
+        <div className="grid gap-4">
           {vehicles.map((v: any, i: number) => (
             <div key={v.id} className="bg-[#1A1A1A] rounded-xl overflow-hidden border border-gray-800 hover:border-[#C9A84C]/50 transition-all">
-              <div className="flex flex-col md:flex-row">
-                <div className="md:w-64 h-48 md:h-auto relative bg-gray-900 shrink-0">
-                  <img
-                    src={vehicleImages[v.name_jp] || 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/No_image_available_450_x_350.svg/320px-No_image_available_450_x_350.svg.png'}
-                    alt={v.name_jp}
-                    className="w-full h-full object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-3 left-3 bg-[#0A0A0A]/80 rounded-full w-10 h-10 flex items-center justify-center">
-                    <span className="text-lg font-bold text-[#C9A84C]">#{i + 1}</span>
-                  </div>
+              <div className="flex">
+                <div className="w-24 md:w-48 shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center gap-2 p-4">
+                  <span className="text-5xl">{vehicleEmoji[v.name_jp] || '🚗'}</span>
+                  <span className="text-2xl">{countryFlag[v.country] || '🌍'}</span>
+                  <span className="text-2xl font-bold text-[#C9A84C]">#{i + 1}</span>
                 </div>
                 <div className="flex-1 p-5">
                   <div className="flex items-center gap-2 flex-wrap">
