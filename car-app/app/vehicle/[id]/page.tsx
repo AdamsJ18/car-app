@@ -6,11 +6,16 @@ const countryFlag: { [key: string]: string } = {
   'イギリス': '🇬🇧', 'アメリカ': '🇺🇸', 'フランス': '🇫🇷', 'スウェーデン': '🇸🇪'
 }
 
-export default async function VehiclePage({ params }: { params: { id: string } }) {
-  const { data: v } = await supabase.from('vehicles').select('*').eq('id', params.id).single()
+export default async function VehiclePage(props: any) {
+  const id = props.params.id
+  const { data: v } = await supabase.from('vehicles').select('*').eq('id', id).single()
+
   if (!v) return (
     <div className="min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center">
-      <p>車両が見つかりません</p>
+      <div className="text-center">
+        <p className="text-2xl mb-4">車両が見つかりません</p>
+        <Link href="/" className="text-[#C9A84C]">← トップへ戻る</Link>
+      </div>
     </div>
   )
 
