@@ -1,18 +1,18 @@
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 
+const countryFlag: { [key: string]: string } = {
+  'イタリア': '🇮🇹', '日本': '🇯🇵', 'ドイツ': '🇩🇪',
+  'イギリス': '🇬🇧', 'アメリカ': '🇺🇸', 'フランス': '🇫🇷', 'スウェーデン': '🇸🇪'
+}
 
 function formatPrice(yen: number): string {
   if (yen >= 100000000) {
     const oku = yen / 100000000
-    return `${oku % 1 === 0 ? oku.toFixed(0) : oku.toFixed(1)}億円`
+    const formatted = oku % 1 === 0 ? oku.toFixed(0) : oku.toFixed(1)
+    return formatted + '億円'
   }
-  return `${(yen / 10000).toLocaleString()}万円`
-}
-
-const countryFlag: { [key: string]: string } = {
-  'イタリア': '🇮🇹', '日本': '🇯🇵', 'ドイツ': '🇩🇪',
-  'イギリス': '🇬🇧', 'アメリカ': '🇺🇸', 'フランス': '🇫🇷', 'スウェーデン': '🇸🇪'
+  return (yen / 10000).toLocaleString() + '万円'
 }
 
 export default async function VehiclePage({ params }: { params: Promise<{ id: string }> }) {
@@ -33,8 +33,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
     <div className="min-h-screen bg-[#0A0A0A] text-white flex items-center justify-center">
       <div className="text-center">
         <p className="text-2xl mb-4">車両が見つかりません</p>
-        <p className="text-gray-500 text-sm mb-4">ID: {id}</p>
-        <Link href="/" className="text-[#C9A84C]">← トップへ戻る</Link>
+        <Link href="/" className="text-[#C9A84C]">トップへ戻る</Link>
       </div>
     </div>
   )
@@ -79,7 +78,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
             </div>
             <div className="bg-gray-900 rounded-lg p-4">
               <p className="text-xs text-gray-500 mb-1">生産台数</p>
-              <p className="text-white font-medium text-sm">{v.production_count ? `${v.production_count.toLocaleString()}台` : '不明'}</p>
+              <p className="text-white font-medium text-sm">{v.production_count ? v.production_count.toLocaleString() + '台' : '不明'}</p>
             </div>
             <div className="bg-gray-900 rounded-lg p-4">
               <p className="text-xs text-gray-500 mb-1">ハンドル</p>
@@ -99,11 +98,11 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
               ].map((item) => (
                 <div key={item.label} className="mb-3">
                   <div className="flex justify-between text-xs text-gray-400 mb-1">
-                    <span>{item.label} <span className="text-gray-600">({item.weight})</span></span>
+                    <span>{item.label} ({item.weight})</span>
                     <span className="text-[#C9A84C] font-bold">{item.value}</span>
                   </div>
                   <div className="bg-gray-800 rounded-full h-1.5">
-                    <div className="bg-[#C9A84C] h-1.5 rounded-full" style={{ width: `${item.value}%` }} />
+                    <div className="bg-[#C9A84C] h-1.5 rounded-full" style={{ width: item.value + '%' }} />
                   </div>
                 </div>
               ))}
@@ -127,7 +126,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
                     <span className="text-blue-400 font-bold">{item.value}</span>
                   </div>
                   <div className="bg-gray-800 rounded-full h-1.5">
-                    <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${item.value * 4}%` }} />
+                    <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: (item.value * 4) + '%' }} />
                   </div>
                 </div>
               ))}
@@ -146,11 +145,11 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-gray-500 mb-1">最低参考価格</p>
-                <p className="text-2xl font-bold text-white">{v.price_range_min_jpy ? `${formatPrice(v.price_range_min_jpy)` : '調査中'}</p>
+                <p className="text-2xl font-bold text-white">{v.price_range_min_jpy ? formatPrice(v.price_range_min_jpy) : '調査中'}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500 mb-1">最高参考価格</p>
-                <p className="text-2xl font-bold text-white">{v.price_range_max_jpy ? `${formatPrice(v.price_range_max_jpy)` : '調査中'}</p>
+                <p className="text-2xl font-bold text-white">{v.price_range_max_jpy ? formatPrice(v.price_range_max_jpy) : '調査中'}</p>
               </div>
             </div>
             <p className="text-xs text-gray-600 mt-4">⚠️ この価格はAI参考レンジです。実際の価格は個体差により大きく異なります。投資判断には使用しないでください。</p>
