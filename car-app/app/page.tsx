@@ -1,15 +1,14 @@
 import { supabase } from '@/lib/supabase'
-import Image from 'next/image'
 
 const vehicleImages: { [key: string]: string } = {
-  'フェラーリ 250 GTO': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/1962_Ferrari_250_GTO_%2836705665064%29.jpg/640px-1962_Ferrari_250_GTO_%2836705665064%29.jpg',
-  'トヨタ 2000GT': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Toyota_2000GT_-_Flickr_-_exfordy.jpg/640px-Toyota_2000GT_-_Flickr_-_exfordy.jpg',
-  'メルセデス・ベンツ 300SL': 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/1955_Mercedes-Benz_300SL_Gullwing_Coupe_34_front.jpg/640px-1955_Mercedes-Benz_300SL_Gullwing_Coupe_34_front.jpg',
-  'ポルシェ 911（930）ターボ': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Porsche_930_Turbo.jpg/640px-Porsche_930_Turbo.jpg',
-  'ランボルギーニ ミウーラ': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Lamborghini_Miura_-_Flickr_-_Alexandre_Pr%C3%A9vot_%281%29.jpg/640px-Lamborghini_Miura_-_Flickr_-_Alexandre_Pr%C3%A9vot_%281%29.jpg',
-  'ジャガー Eタイプ': 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Jaguar_E-Type_Series_I_3.8_Roadster.jpg/640px-Jaguar_E-Type_Series_I_3.8_Roadster.jpg',
-  '日産 スカイライン GT-R（KPGC10）': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Nissan_Skyline_2000GT-R_%28KPGC10%29_01.jpg/640px-Nissan_Skyline_2000GT-R_%28KPGC10%29_01.jpg',
-  'アルファ・ロメオ ジュリア スプリント GTA': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Alfa_Romeo_Giulia_Sprint_GTA_1965.jpg/640px-Alfa_Romeo_Giulia_Sprint_GTA_1965.jpg',
+  'フェラーリ 250 GTO': 'https://images.unsplash.com/photo-1592198084033-aade902d1aae?w=640',
+  'トヨタ 2000GT': 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=640',
+  'メルセデス・ベンツ 300SL': 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=640',
+  'ポルシェ 911（930）ターボ': 'https://images.unsplash.com/photo-1611016186353-9af58c69a533?w=640',
+  'ランボルギーニ ミウーラ': 'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=640',
+  'ジャガー Eタイプ': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=640',
+  '日産 スカイライン GT-R（KPGC10）': 'https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=640',
+  'アルファ・ロメオ ジュリア スプリント GTA': 'https://images.unsplash.com/photo-1588258219511-64eb629cb833?w=640',
 }
 
 async function getVehicles() {
@@ -35,16 +34,12 @@ export default async function Home() {
           {vehicles.map((v: any, i: number) => (
             <div key={v.id} className="bg-[#1A1A1A] rounded-xl overflow-hidden border border-gray-800 hover:border-[#C9A84C]/50 transition-all">
               <div className="flex flex-col md:flex-row">
-                <div className="md:w-64 h-48 md:h-auto relative bg-gray-900 shrink-0">
-                  {vehicleImages[v.name_jp] ? (
-                    <img
-                      src={vehicleImages[v.name_jp]}
-                      alt={v.name_jp}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-6xl">🚗</div>
-                  )}
+                <div className="md:w-64 h-48 md:h-auto relative bg-gray-900 shrink-0 flex items-center justify-center">
+                  <img
+                    src={vehicleImages[v.name_jp] || 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=640'}
+                    alt={v.name_jp}
+                    className="w-full h-full object-cover"
+                  />
                   <div className="absolute top-3 left-3 bg-[#0A0A0A]/80 rounded-full w-10 h-10 flex items-center justify-center">
                     <span className="text-lg font-bold text-[#C9A84C]">#{i + 1}</span>
                   </div>
