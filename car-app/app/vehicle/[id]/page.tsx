@@ -1,6 +1,15 @@
 import { createClient } from '@supabase/supabase-js'
 import Link from 'next/link'
 
+
+function formatPrice(yen: number): string {
+  if (yen >= 100000000) {
+    const oku = yen / 100000000
+    return `${oku % 1 === 0 ? oku.toFixed(0) : oku.toFixed(1)}億円`
+  }
+  return `${(yen / 10000).toLocaleString()}万円`
+}
+
 const countryFlag: { [key: string]: string } = {
   'イタリア': '🇮🇹', '日本': '🇯🇵', 'ドイツ': '🇩🇪',
   'イギリス': '🇬🇧', 'アメリカ': '🇺🇸', 'フランス': '🇫🇷', 'スウェーデン': '🇸🇪'
@@ -137,11 +146,11 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-xs text-gray-500 mb-1">最低参考価格</p>
-                <p className="text-2xl font-bold text-white">{v.price_range_min_jpy ? `${(v.price_range_min_jpy/10000).toLocaleString()}万円` : '調査中'}</p>
+                <p className="text-2xl font-bold text-white">{v.price_range_min_jpy ? `${formatPrice(v.price_range_min_jpy)` : '調査中'}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500 mb-1">最高参考価格</p>
-                <p className="text-2xl font-bold text-white">{v.price_range_max_jpy ? `${(v.price_range_max_jpy/10000).toLocaleString()}万円` : '調査中'}</p>
+                <p className="text-2xl font-bold text-white">{v.price_range_max_jpy ? `${formatPrice(v.price_range_max_jpy)` : '調査中'}</p>
               </div>
             </div>
             <p className="text-xs text-gray-600 mt-4">⚠️ この価格はAI参考レンジです。実際の価格は個体差により大きく異なります。投資判断には使用しないでください。</p>
