@@ -30,12 +30,11 @@ function getValuationComment(total: number): string {
   return 'やや低い評価指数です。維持コストが価値を上回る可能性があります。ただし個人的な楽しみや趣味としての価値は別途存在します。'
 }
 
-function getJapanComment(japanScore: number, steering: string, difficulty: string): string {
-  const steeringNote = steering === 'left' ? '左ハンドルのため並行輸入手続きが必要です。' : '右ハンドルのため国内登録が容易です。'
+function getJapanComment(japanScore: number, difficulty: string): string {
   const diffNote = difficulty === 'easy' ? '並行輸入の実績が豊富で手続きが比較的容易です。' : difficulty === 'medium' ? '並行輸入には専門業者への相談が推奨されます。' : '並行輸入の実績が少なく専門知識が必要です。'
-  if (japanScore >= 80) return steeringNote + diffNote + '国内に専門整備士や部品供給網が整っており、長期所有に適しています。'
-  if (japanScore >= 60) return steeringNote + diffNote + '専門ショップへの相談を推奨します。'
-  return steeringNote + diffNote + '購入前に必ず専門家への相談をお勧めします。'
+  if (japanScore >= 80) return diffNote + '国内に専門整備士や部品供給網が整っており、長期所有に適しています。'
+  if (japanScore >= 60) return diffNote + '専門ショップへの相談を推奨します。'
+  return diffNote + '購入前に必ず専門家への相談をお勧めします。'
 }
 
 export default async function VehiclePage({ params }: { params: Promise<{ id: string }> }) {
@@ -63,6 +62,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-[#1A1A1A] rounded-xl p-8 border border-gray-800">
 
+          {/* ヘッダー */}
           <div className="flex items-start justify-between flex-wrap gap-4 mb-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
@@ -83,12 +83,12 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
 
           <p className="text-gray-300 mb-8 leading-relaxed">{v.description}</p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {/* スペック */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {[
               { label: 'エンジン', value: v.engine || '不明' },
               { label: '駆動方式', value: v.drive_type || '不明' },
               { label: '生産台数', value: v.production_count ? v.production_count.toLocaleString() + '台' : '不明' },
-              { label: 'ハンドル', value: v.steering === 'right' ? '🔵 右ハンドル' : '🟠 左ハンドル' },
             ].map(item => (
               <div key={item.label} className="bg-gray-900 rounded-lg p-4">
                 <p className="text-xs text-gray-500 mb-1">{item.label}</p>
@@ -97,6 +97,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
             ))}
           </div>
 
+          {/* グローバル評価指数 */}
           <div className="bg-gray-900 rounded-xl p-6 mb-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-lg font-bold text-[#C9A84C]">グローバル評価指数</h3>
@@ -142,19 +143,13 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
             </div>
           </div>
 
+          {/* 日本市場スコア */}
           <div className="bg-gray-900 rounded-xl p-6 mb-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-lg font-bold text-blue-400">🇯🇵 日本市場スコア</h3>
               <span className="text-3xl font-bold text-blue-400">{v.japan_total_score}<span className="text-sm text-gray-400">/100</span></span>
             </div>
-            <p className="text-xs text-gray-500 mb-4">日本国内での購入・維持・登録のしやすさを評価した独立スコアです。</p>
-            <div className="mb-4 flex items-center gap-3 bg-gray-800 rounded-lg p-3">
-              <span className="text-2xl">{v.steering === 'right' ? '🔵' : '🟠'}</span>
-              <div>
-                <p className="text-sm font-bold text-white">{v.steering === 'right' ? '右ハンドル（日本仕様）' : '左ハンドル（並行輸入仕様）'}</p>
-                <p className="text-xs text-gray-400">{v.steering === 'right' ? '国内登録手続き：標準的' : '並行輸入の手続きが必要な場合があります。欠点ではなく手続きの違いです。'}</p>
-              </div>
-            </div>
+            <p className="text-xs text-gray-500 mb-5">日本国内での購入・維持・登録のしやすさを評価した独立スコアです。グローバル評価指数とは別軸の指標です。</p>
             <div className="space-y-5">
               {[
                 { label: '国内流通実績', value: v.japan_score_distribution, desc: '国内での正規販売歴・並行輸入の実績から算出。流通実績が多いほど専門知識・部品・整備士が充実しやすい。' },
@@ -190,11 +185,12 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
               </div>
               <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
                 <p className="text-xs text-blue-400 font-bold mb-1">🇯🇵 日本市場判定</p>
-                <p className="text-sm text-gray-300 leading-relaxed">{getJapanComment(v.japan_total_score, v.steering, v.parallel_import_difficulty)}</p>
+                <p className="text-sm text-gray-300 leading-relaxed">{getJapanComment(v.japan_total_score, v.parallel_import_difficulty)}</p>
               </div>
             </div>
           </div>
 
+          {/* AI参考価格 */}
           <div className="bg-gray-900 rounded-xl p-6 mb-6">
             <h3 className="text-lg font-bold text-[#C9A84C] mb-2">💰 AI参考価格レンジ</h3>
             <p className="text-xs text-gray-500 mb-4">生産台数・希少性・文化的価値・市場トレンドをもとにAIが算出した参考価格です。</p>
