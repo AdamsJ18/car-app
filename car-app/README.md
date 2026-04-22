@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚗 CARアプリ｜世界名車 価値評価インデックス
 
-## Getting Started
+> 「公開データのみ」という制約下で、Explainableな車両価値評価モデルをどこまで構築できるかを検証したポートフォリオプロジェクト。
 
-First, run the development server:
+🌐 **公開URL**: https://car-app-chi-eight.vercel.app
+
+---
+
+## 📌 このプロジェクトが証明すること
+
+- ✅ 不完全データを正直に扱う設計ができる（データ充足率・情報不足フラグ）
+- ✅ Explainable AIを実装できる（スコアの根拠・重みの設計・信頼度表示）
+- ✅ 制約下で意思決定できる（完全無料・公開データのみ）
+- ✅ 日本市場固有の要因を設計に統合できる（右左ハンドル・並行輸入・車検）
+- ✅ ChatGPT・Claudeを活用した反復的な設計改善ができる
+
+---
+
+## 🎯 プロジェクト概要
+
+| 項目 | 内容 |
+|------|------|
+| 対象車両 | 1930〜1990年製造・7カ国（日本・ドイツ・イタリア・イギリス・アメリカ・フランス・スウェーデン） |
+| 評価指標 | グローバル評価指数・日本市場リスクスコアの2軸評価 |
+| データソース | Wikipedia API・Wikidata API（全て公開データ・無料） |
+| 月額費用 | ¥0（完全無料構成） |
+
+---
+
+## 🛠️ 技術スタック
+
+### フロントエンド
+| 技術 | 用途 | 選定理由 |
+|------|------|---------|
+| Next.js 14 (App Router) | フレームワーク | SSG/ISRでSEO・速度を両立 |
+| TypeScript | 言語 | 型安全・保守性向上 |
+| Tailwind CSS | スタイリング | 高速UI開発 |
+
+### バックエンド・インフラ
+| 技術 | 用途 | 無料枠 |
+|------|------|--------|
+| Supabase (PostgreSQL) | データベース | 500MB |
+| Vercel | ホスティング | 個人プロジェクト無料 |
+| GitHub Actions | 自動更新 | 月2,000分 |
+
+**月額合計：¥0**
+
+---
+
+## ⚖️ スコアリング設計
+
+### グローバル評価指数（なぜこの重みか）
+
+| 評価指標 | 重み | 根拠 |
+|----------|------|------|
+| 希少性（生産台数・現存台数） | **30%** | クラシックカー市場で最も価値に直結する要因 |
+| 歴史的・文化的価値 | **25%** | 時代背景・受賞歴が長期的な価値を支える |
+| メンテナンス維持性 | **20%** | どれだけ希少でも維持できなければ価値は下がる |
+| デザイン・技術的革新性 | **15%** | 主観性が高いため重みを抑える |
+| 著名オーナー・受賞歴 | **10%** | 一時的な場合もあるため重みを最小に |
+
+> 均等配分（各20%）や価格データ重視案も検討したが、「公開データのみ」という制約下で価値の本質を評価するためにこの設計を採用。
+
+### 🇯🇵 日本市場リスクスコア（独自設計）
+
+グローバル評価指数とは別に、日本国内での購入・維持のしやすさを評価する独立指標。
+
+| 評価指標 | 重み |
+|----------|------|
+| 国内流通実績 | 30% |
+| 車検適合難易度 | 25% |
+| 部品入手性（国内） | 25% |
+| 専門整備士の国内存在 | 20% |
+
+> ⚠️ ハンドル仕様（右/左）はスコアに影響しない。左ハンドルは「欠点」ではなく「特性」として事実情報のみ表示する設計判断を採用。
+
+---
+
+## 🔍 Explainabilityの実装
+
+このアプリが最も重視した設計原則は「なぜそのスコアか説明できること」。
+
+- **データ充足率**：5指標のうち取得できたデータの割合を数値で表示
+- **スコア計算不能条件**：データ充足率40%未満でフラグ表示
+- **重み設計の根拠**：代替案との比較をドキュメント化
+- **AI参考価格レンジ**：「予測価格」ではなく「AI参考レンジ」として表示
+- **個体差警告**：同一車種でも価格が2〜3倍異なるケースを明記
+
+---
+
+## 🇯🇵 日本市場特化情報
+
+グローバル自動車ブローカーのレビューを受け、日本市場固有の要因を設計に統合。
+
+- 右ハンドル / 左ハンドルバッジ（スコアに影響しない情報として中立表示）
+- 並行輸入難易度（易 / 中 / 難）
+- 車検適合に関する注意事項
+- 国内部品入手性・専門整備士の存在
+
+---
+
+## 📊 機能一覧
+
+- [x] 評価指数ランキング（28台・スコア順表示）
+- [x] 車両詳細ページ（スコア内訳・日本市場スコア・AI参考価格）
+- [x] リアルタイム検索（車名・メーカー・国）
+- [x] フィルター（生産国 / ハンドル仕様）
+- [ ] AIチャット相談（開発中）
+- [ ] 2車種比較機能（開発予定）
+- [ ] お気に入り・ポートフォリオ機能（開発予定）
+
+---
+
+## 🔄 設計改善プロセス
+
+このプロジェクトはChatGPTとClaudeによる複数回のレビューを経て設計を改善しました。
+ChatGPT最終評価：**95点**（残り5点は実装とUXのみ）
+
+---
+
+## ⚠️ データの限界と制約
+
+- 価格データはWikipedia・Wikidataに存在しないため「AI参考レンジ」として表示
+- スコアはAI判定を含むため客観的な検証が困難
+- 車種単位のスコアであり個体差は考慮されていない
+- 本アプリは情報提供目的のみ。投資判断には使用しないでください
+
+---
+
+## 🚀 ローカルで動かす
 
 ```bash
+git clone https://github.com/AdamsJ18/car-app.git
+cd car-app
+npm install
+
+# .env.localを作成
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+*本プロジェクトはChatGPT・Claudeによる複数回のレビューと4プロフェッショナル評価を経て設計・実装されました。*
