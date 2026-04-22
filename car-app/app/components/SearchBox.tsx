@@ -23,17 +23,6 @@ const countryFlag: { [key: string]: string } = {
   'イギリス': '🇬🇧', 'アメリカ': '🇺🇸', 'フランス': '🇫🇷', 'スウェーデン': '🇸🇪'
 }
 
-const vehicleEmoji: { [key: string]: string } = {
-  'フェラーリ 250 GTO': '🔴',
-  'トヨタ 2000GT': '⚪',
-  'メルセデス・ベンツ 300SL': '⚫',
-  'ポルシェ 911（930）ターボ': '🟡',
-  'ランボルギーニ ミウーラ': '🟠',
-  'ジャガー Eタイプ': '🟢',
-  '日産 スカイライン GT-R（KPGC10）': '⚪',
-  'アルファ・ロメオ ジュリア スプリント GTA': '🔴',
-}
-
 function formatPrice(yen: number): string {
   if (yen >= 100000000) {
     const oku = yen / 100000000
@@ -55,19 +44,23 @@ const sortOptions: { value: SortKey; label: string }[] = [
 function sortVehicles(vehicles: Vehicle[], sortKey: SortKey): Vehicle[] {
   const arr = [...vehicles]
   switch (sortKey) {
-    case 'total_score':
-      return arr.sort((a, b) => b.total_score - a.total_score)
-    case 'japan_total_score':
-      return arr.sort((a, b) => b.japan_total_score - a.japan_total_score)
-    case 'price_asc':
-      return arr.sort((a, b) => (a.price_range_min_jpy || 0) - (b.price_range_min_jpy || 0))
-    case 'price_desc':
-      return arr.sort((a, b) => (b.price_range_max_jpy || 0) - (a.price_range_max_jpy || 0))
-    case 'year_asc':
-      return arr.sort((a, b) => a.year_start - b.year_start)
-    default:
-      return arr
+    case 'total_score': return arr.sort((a, b) => b.total_score - a.total_score)
+    case 'japan_total_score': return arr.sort((a, b) => b.japan_total_score - a.japan_total_score)
+    case 'price_asc': return arr.sort((a, b) => (a.price_range_min_jpy || 0) - (b.price_range_min_jpy || 0))
+    case 'price_desc': return arr.sort((a, b) => (b.price_range_max_jpy || 0) - (a.price_range_max_jpy || 0))
+    case 'year_asc': return arr.sort((a, b) => a.year_start - b.year_start)
+    default: return arr
   }
+}
+
+const countryColors: { [key: string]: { bg: string; color: string } } = {
+  'イタリア': { bg: '#FFF0F0', color: '#E74C3C' },
+  '日本': { bg: '#FFF0F5', color: '#E91E63' },
+  'ドイツ': { bg: '#F0F4FF', color: '#3F51B5' },
+  'イギリス': { bg: '#F0F8FF', color: '#2196F3' },
+  'アメリカ': { bg: '#F0F4FF', color: '#1976D2' },
+  'フランス': { bg: '#F5F0FF', color: '#673AB7' },
+  'スウェーデン': { bg: '#FFFBF0', color: '#FF9800' },
 }
 
 export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
@@ -90,35 +83,56 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
 
   const sorted = sortVehicles(filtered, sortKey)
 
+  const selectStyle = {
+    background: 'white',
+    border: '2px solid #BAE0F7',
+    borderRadius: 12,
+    padding: '10px 16px',
+    fontSize: 13,
+    color: '#2C3E50',
+    fontWeight: 600,
+    cursor: 'pointer',
+    outline: 'none',
+  }
+
   return (
     <div>
-      <div className="bg-[#1A1A1A] rounded-xl p-4 mb-6 border border-gray-800">
-        <div className="flex flex-col md:flex-row gap-3">
-          <div className="flex-1 relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+      {/* 検索・フィルターエリア */}
+      <div style={{
+        background: 'white',
+        borderRadius: 20,
+        padding: '20px',
+        boxShadow: '0 4px 20px rgba(75,163,211,0.12)',
+        marginBottom: 24
+      }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ flex: 1, minWidth: 200, position: 'relative' }}>
+            <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontSize: 16 }}>🔍</span>
             <input
               type="text"
               placeholder="車名・メーカー・国で検索..."
               value={query}
               onChange={e => setQuery(e.target.value)}
-              className="w-full bg-gray-900 text-white pl-9 pr-4 py-2.5 rounded-lg border border-gray-700 focus:border-[#C9A84C] focus:outline-none text-sm"
+              style={{
+                width: '100%',
+                background: '#F8FAFB',
+                border: '2px solid #BAE0F7',
+                borderRadius: 12,
+                padding: '10px 16px 10px 42px',
+                fontSize: 13,
+                color: '#2C3E50',
+                fontWeight: 600,
+                outline: 'none',
+              }}
             />
           </div>
-          <select
-            value={selectedCountry}
-            onChange={e => setSelectedCountry(e.target.value)}
-            className="bg-gray-900 text-white px-4 py-2.5 rounded-lg border border-gray-700 focus:border-[#C9A84C] focus:outline-none text-sm"
-          >
+          <select value={selectedCountry} onChange={e => setSelectedCountry(e.target.value)} style={selectStyle}>
             <option value="">🌍 全ての国</option>
             {countries.map(c => (
               <option key={c} value={c}>{countryFlag[c]} {c}</option>
             ))}
           </select>
-          <select
-            value={sortKey}
-            onChange={e => setSortKey(e.target.value as SortKey)}
-            className="bg-gray-900 text-white px-4 py-2.5 rounded-lg border border-gray-700 focus:border-[#C9A84C] focus:outline-none text-sm"
-          >
+          <select value={sortKey} onChange={e => setSortKey(e.target.value as SortKey)} style={selectStyle}>
             {sortOptions.map(opt => (
               <option key={opt.value} value={opt.value}>{opt.label}</option>
             ))}
@@ -126,75 +140,155 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
           {(query || selectedCountry) && (
             <button
               onClick={() => { setQuery(''); setSelectedCountry('') }}
-              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2.5 rounded-lg text-sm transition-colors"
+              style={{
+                background: '#F8FAFB',
+                border: '2px solid #BAE0F7',
+                borderRadius: 12,
+                padding: '10px 16px',
+                fontSize: 13,
+                color: '#8BA4B5',
+                fontWeight: 700,
+                cursor: 'pointer',
+              }}
             >
-              クリア
+              ✕ クリア
             </button>
           )}
         </div>
-        <p className="text-xs text-gray-500 mt-2">
-          {sorted.length}件表示
-          {query && <span className="ml-2 text-[#C9A84C]">「{query}」の検索結果</span>}
-          <span className="ml-2 text-gray-600">｜{sortOptions.find(o => o.value === sortKey)?.label}</span>
+        <p style={{ fontSize: 12, color: '#8BA4B5', marginTop: 10, marginBottom: 0 }}>
+          <strong style={{ color: '#4BA3D3' }}>{sorted.length}件</strong>表示
+          {query && <span style={{ marginLeft: 8, color: '#F5A623' }}>「{query}」の検索結果</span>}
+          <span style={{ marginLeft: 8 }}>｜{sortOptions.find(o => o.value === sortKey)?.label}</span>
         </p>
       </div>
 
+      {/* 車両リスト */}
       {sorted.length === 0 ? (
-        <div className="text-center py-16 text-gray-500">
-          <p className="text-4xl mb-4">🔍</p>
-          <p className="text-lg">「{query}」に一致する車両が見つかりませんでした</p>
-          <p className="text-sm mt-2">別のキーワードで検索してみてください</p>
+        <div style={{ textAlign: 'center', padding: '60px 20px', color: '#8BA4B5' }}>
+          <div style={{ fontSize: 64, marginBottom: 16 }}>🔍</div>
+          <p style={{ fontSize: 18, fontWeight: 700 }}>「{query}」に一致する車両が見つかりませんでした</p>
+          <p style={{ fontSize: 13, marginTop: 8 }}>別のキーワードで検索してみてください</p>
         </div>
       ) : (
-        <div className="grid gap-4">
-          {sorted.map((v, i) => (
-            <a key={v.id} href={`/vehicle/${v.id}`}>
-              <div className="bg-[#1A1A1A] rounded-xl overflow-hidden border border-gray-800 hover:border-[#C9A84C]/50 transition-all cursor-pointer">
-                <div className="flex">
-                  <div className="w-24 md:w-40 shrink-0 bg-gradient-to-br from-gray-800 to-gray-900 flex flex-col items-center justify-center gap-2 p-4">
-                    <span className="text-4xl">{vehicleEmoji[v.name_jp] || '🚗'}</span>
-                    <span className="text-2xl">{countryFlag[v.country] || '🌍'}</span>
-                    <span className="text-xl font-bold text-[#C9A84C]">#{i + 1}</span>
-                  </div>
-                  <div className="flex-1 p-5">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="text-lg font-bold text-white">{v.name_jp}</h3>
-                      <span className="text-xs text-gray-500 ml-auto">詳細を見る →</span>
+        <div style={{ display: 'grid', gap: 16 }}>
+          {sorted.map((v, i) => {
+            const cc = countryColors[v.country] || { bg: '#F8FAFB', color: '#8BA4B5' }
+            return (
+              <a key={v.id} href={`/vehicle/${v.id}`} style={{ textDecoration: 'none' }}>
+                <div style={{
+                  background: 'white',
+                  borderRadius: 20,
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 20px rgba(75,163,211,0.10)',
+                  display: 'flex',
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-4px)'
+                    ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 32px rgba(75,163,211,0.22)'
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'
+                    ;(e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 20px rgba(75,163,211,0.10)'
+                  }}
+                >
+                  {/* 左サイドバー */}
+                  <div style={{
+                    width: 120,
+                    flexShrink: 0,
+                    background: `linear-gradient(180deg, ${cc.bg}, white)`,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '20px 12px',
+                    borderRight: '2px dashed #E8F4FD',
+                    gap: 8,
+                  }}>
+                    <div style={{
+                      width: 56, height: 56,
+                      background: cc.bg,
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 28,
+                      border: `2px solid ${cc.color}30`
+                    }}>
+                      🚗
                     </div>
-                    <div className="flex items-center gap-3 mt-1 text-sm text-gray-400">
+                    <div style={{ fontSize: 24 }}>{countryFlag[v.country] || '🌍'}</div>
+                    <div style={{
+                      fontSize: 18, fontWeight: 900,
+                      color: cc.color,
+                      background: cc.bg,
+                      padding: '2px 10px',
+                      borderRadius: 99,
+                    }}>
+                      #{i + 1}
+                    </div>
+                  </div>
+
+                  {/* メインコンテンツ */}
+                  <div style={{ flex: 1, padding: '20px 24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+                      <div>
+                        <h3 style={{ fontSize: 17, fontWeight: 900, color: '#2C3E50', margin: 0 }}>{v.name_jp}</h3>
+                        <p style={{ fontSize: 11, color: '#8BA4B5', margin: '2px 0 0' }}>{v.name_en}</p>
+                      </div>
+                      <span style={{
+                        fontSize: 12, fontWeight: 700,
+                        color: '#4BA3D3',
+                        background: '#E8F4FD',
+                        padding: '4px 12px',
+                        borderRadius: 99,
+                      }}>
+                        詳細を見る →
+                      </span>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: 12, marginTop: 6, fontSize: 12, color: '#8BA4B5' }}>
                       <span>{v.maker}</span><span>·</span>
                       <span>{v.country}</span><span>·</span>
                       <span>{v.year_start}〜{v.year_end}年</span>
                     </div>
-                    <p className="text-sm text-gray-400 mt-2 line-clamp-1">{v.description}</p>
-                    <div className="mt-3 grid grid-cols-2 gap-3">
+
+                    <p style={{ fontSize: 13, color: '#6B8A9A', marginTop: 8, lineHeight: 1.6, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                      {v.description}
+                    </p>
+
+                    {/* スコアバー */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginTop: 14 }}>
                       <div>
-                        <p className="text-xs text-gray-500 mb-1">グローバル評価指数</p>
-                        <div className="flex items-center gap-2">
-                          <div className="flex-1 bg-gray-800 rounded-full h-2">
-                            <div className="bg-[#C9A84C] h-2 rounded-full" style={{ width: v.total_score + '%' }} />
-                          </div>
-                          <span className="text-sm font-bold text-[#C9A84C] w-8">{v.total_score}</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                          <span style={{ fontSize: 11, color: '#8BA4B5', fontWeight: 600 }}>グローバル評価指数</span>
+                          <span style={{ fontSize: 13, fontWeight: 900, color: '#F5A623' }}>{v.total_score}</span>
+                        </div>
+                        <div style={{ height: 8, borderRadius: 99, background: '#F0F9FF', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', borderRadius: 99, background: 'linear-gradient(90deg, #F5A623, #FFD700)', width: v.total_score + '%' }} />
                         </div>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 mb-1">🇯🇵 日本市場スコア</p>
-                        <div className="flex items-center gap-2">
-                          <div className="flex-1 bg-gray-800 rounded-full h-2">
-                            <div className="bg-blue-500 h-2 rounded-full" style={{ width: v.japan_total_score + '%' }} />
-                          </div>
-                          <span className="text-sm font-bold text-blue-400 w-8">{v.japan_total_score}</span>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                          <span style={{ fontSize: 11, color: '#8BA4B5', fontWeight: 600 }}>🇯🇵 日本市場スコア</span>
+                          <span style={{ fontSize: 13, fontWeight: 900, color: '#4BA3D3' }}>{v.japan_total_score}</span>
+                        </div>
+                        <div style={{ height: 8, borderRadius: 99, background: '#F0F9FF', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', borderRadius: 99, background: 'linear-gradient(90deg, #4BA3D3, #7BC8F0)', width: v.japan_total_score + '%' }} />
                         </div>
                       </div>
                     </div>
-                    <div className="mt-2 text-xs text-gray-500">
-                      データ充足率：{v.data_completeness}%　|　AI参考価格：{v.price_range_min_jpy ? formatPrice(v.price_range_min_jpy) + '〜' + formatPrice(v.price_range_max_jpy) : '調査中'}
+
+                    <div style={{ display: 'flex', gap: 16, marginTop: 10, fontSize: 11, color: '#8BA4B5' }}>
+                      <span>データ充足率：<strong style={{ color: '#4BA3D3' }}>{v.data_completeness}%</strong></span>
+                      <span>AI参考価格：<strong style={{ color: '#F5A623' }}>{v.price_range_min_jpy ? formatPrice(v.price_range_min_jpy) + '〜' + formatPrice(v.price_range_max_jpy) : '調査中'}</strong></span>
                     </div>
                   </div>
                 </div>
-              </div>
-            </a>
-          ))}
+              </a>
+            )
+          })}
         </div>
       )}
     </div>

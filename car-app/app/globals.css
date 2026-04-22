@@ -1,26 +1,89 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --sky: #E8F4FD;
+  --sky-mid: #BAE0F7;
+  --blue: #4BA3D3;
+  --blue-dark: #2980B9;
+  --mint: #E8F8F0;
+  --mint-mid: #A8E6C8;
+  --green: #4CAF82;
+  --gold: #F5A623;
+  --gold-light: #FFF3CD;
+  --coral: #FF6B6B;
+  --white: #FFFFFF;
+  --gray-light: #F8FAFB;
+  --gray: #8BA4B5;
+  --dark: #2C3E50;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+* { box-sizing: border-box; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Zen Kaku Gothic New', 'Nunito', sans-serif;
+  background: var(--sky);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(75, 163, 211, 0.12);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(75, 163, 211, 0.22);
+}
+
+.score-bar {
+  height: 8px;
+  border-radius: 99px;
+  background: #E8F4FD;
+  overflow: hidden;
+}
+
+.score-bar-fill-gold {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #F5A623, #FFD700);
+}
+
+.score-bar-fill-blue {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #4BA3D3, #7BC8F0);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.float { animation: float 3s ease-in-out infinite; }
+.fade-in { animation: fadeInUp 0.6s ease forwards; }
+
+.btn-primary {
+  background: linear-gradient(135deg, #4BA3D3, #2980B9);
+  color: white;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(75, 163, 211, 0.4);
 }

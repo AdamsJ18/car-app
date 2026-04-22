@@ -13,74 +13,179 @@ async function getVehicles() {
 export default async function Home() {
   const vehicles = await getVehicles()
   return (
-    <main className="min-h-screen bg-[#0A0A0A] text-[#F5F5F5]">
+    <main style={{ background: 'linear-gradient(180deg, #E8F4FD 0%, #F0F9FF 50%, #E8F8F0 100%)', minHeight: '100vh' }}>
 
       {/* ヘッダー */}
-      <header className="border-b border-[#C9A84C]/30 p-6">
-        <h1 className="text-3xl font-bold text-[#C9A84C]">🚗 CARアプリ</h1>
-        <p className="text-gray-400 text-sm mt-1">世界名車 価値評価インデックス｜1930〜1990年製造・7カ国対象</p>
+      <header style={{ background: 'white', borderBottom: '3px solid #BAE0F7', padding: '16px 24px' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span style={{ fontSize: 36 }}>🚗</span>
+            <div>
+              <h1 style={{ fontSize: 24, fontWeight: 900, color: '#2980B9', margin: 0 }}>CARアプリ</h1>
+              <p style={{ fontSize: 11, color: '#8BA4B5', margin: 0 }}>世界名車 価値評価インデックス</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 12, background: '#E8F4FD', color: '#4BA3D3', padding: '6px 14px', borderRadius: 99, fontWeight: 700 }}>
+              🤖 AI・クルマん
+            </span>
+          </div>
+        </div>
       </header>
 
-      {/* AI・クルマん紹介セクション */}
-      <div className="bg-gradient-to-r from-[#1A1A1A] to-[#0A0A0A] border-b border-[#C9A84C]/20">
-        <div className="max-w-6xl mx-auto p-6">
-          <div className="flex flex-col md:flex-row items-center gap-6">
+      {/* ヒーローセクション */}
+      <div style={{ maxWidth: 1100, margin: '0 auto', padding: '40px 24px 20px' }}>
+        <div style={{
+          background: 'white',
+          borderRadius: 28,
+          padding: '40px',
+          boxShadow: '0 8px 40px rgba(75,163,211,0.15)',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 24,
+          marginBottom: 32,
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          {/* 背景装飾 */}
+          <div style={{
+            position: 'absolute', top: -40, right: -40,
+            width: 200, height: 200,
+            background: 'radial-gradient(circle, #BAE0F7 0%, transparent 70%)',
+            borderRadius: '50%', opacity: 0.5
+          }} />
+          <div style={{
+            position: 'absolute', bottom: -30, left: -30,
+            width: 150, height: 150,
+            background: 'radial-gradient(circle, #A8E6C8 0%, transparent 70%)',
+            borderRadius: '50%', opacity: 0.4
+          }} />
 
-            {/* キャラクターアイコン */}
-            <div className="shrink-0">
-              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#C9A84C] to-[#8B6914] flex items-center justify-center text-5xl shadow-lg shadow-[#C9A84C]/20">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 28, flexWrap: 'wrap', position: 'relative' }}>
+
+            {/* キャラクター */}
+            <div style={{ textAlign: 'center', flexShrink: 0 }}>
+              <div style={{
+                width: 110, height: 110,
+                background: 'linear-gradient(135deg, #4BA3D3, #2980B9)',
+                borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 52,
+                boxShadow: '0 8px 24px rgba(75,163,211,0.35)',
+                margin: '0 auto',
+                animation: 'float 3s ease-in-out infinite'
+              }}>
                 🤖
               </div>
-              <p className="text-center text-[#C9A84C] font-bold text-sm mt-2">AI・クルマん</p>
+              <div style={{
+                marginTop: 10,
+                background: 'linear-gradient(135deg, #4BA3D3, #2980B9)',
+                color: 'white',
+                padding: '4px 16px',
+                borderRadius: 99,
+                fontSize: 12,
+                fontWeight: 800,
+                display: 'inline-block'
+              }}>
+                AI・クルマん
+              </div>
             </div>
 
-            {/* 説明文 */}
-            <div className="flex-1">
-              <div className="bg-[#1A1A1A] rounded-2xl rounded-tl-none p-5 border border-[#C9A84C]/30 relative">
-                <div className="absolute -left-3 top-4 w-3 h-3 bg-[#1A1A1A] border-l border-t border-[#C9A84C]/30 rotate-45 hidden md:block"></div>
-                <h2 className="text-lg font-bold text-white mb-2">
-                  はじめまして！AI・クルマんです 🚗
+            {/* 吹き出し */}
+            <div style={{ flex: 1, minWidth: 280 }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #E8F4FD, #F0F9FF)',
+                border: '2px solid #BAE0F7',
+                borderRadius: '0 20px 20px 20px',
+                padding: '20px 24px',
+                position: 'relative'
+              }}>
+                <div style={{
+                  position: 'absolute', top: -2, left: -14,
+                  width: 0, height: 0,
+                  borderTop: '12px solid #BAE0F7',
+                  borderLeft: '14px solid transparent'
+                }} />
+                <h2 style={{ fontSize: 20, fontWeight: 900, color: '#2980B9', margin: '0 0 10px' }}>
+                  こんにちは！AI・クルマんです 👋
                 </h2>
-                <p className="text-gray-300 text-sm leading-relaxed mb-3">
-                  私は世界のクラシックカー（1930〜1990年製造）の
-                  <span className="text-[#C9A84C] font-bold">現在の価値</span>と
-                  <span className="text-[#C9A84C] font-bold">将来の価値向上</span>を
-                  データに基づいて予測・評価するAIアシスタントです。
+                <p style={{ fontSize: 14, color: '#4A6A7A', lineHeight: 1.8, margin: '0 0 12px' }}>
+                  世界のクラシックカー（1930〜1990年製造）の
+                  <strong style={{ color: '#F5A623' }}>現在の価値</strong>と
+                  <strong style={{ color: '#4CAF82' }}>将来の価値向上</strong>を
+                  データに基づいて予測・評価します！<br />
+                  希少性・文化的価値など5つの指標から評価指数を算出し、
+                  日本市場での購入しやすさも独自に分析しています。
                 </p>
-                <p className="text-gray-300 text-sm leading-relaxed mb-3">
-                  希少性・文化的価値・維持性など5つの指標から
-                  <span className="text-[#C9A84C] font-bold">グローバル評価指数</span>を算出し、
-                  さらに日本で購入・維持するしやすさを示す
-                  <span className="text-blue-400 font-bold">日本市場スコア</span>も独自に評価しています。
-                </p>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  <span className="text-xs bg-[#C9A84C]/20 text-[#C9A84C] px-3 py-1 rounded-full border border-[#C9A84C]/30">📊 70台以上のデータ</span>
-                  <span className="text-xs bg-blue-900/30 text-blue-400 px-3 py-1 rounded-full border border-blue-500/30">🇯🇵 日本市場特化分析</span>
-                  <span className="text-xs bg-green-900/30 text-green-400 px-3 py-1 rounded-full border border-green-500/30">🤖 AI価値予測</span>
-                  <span className="text-xs bg-purple-900/30 text-purple-400 px-3 py-1 rounded-full border border-purple-500/30">💰 AI参考価格レンジ</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {[
+                    { icon: '📊', text: `${vehicles.length}台のデータ`, bg: '#E8F4FD', color: '#4BA3D3' },
+                    { icon: '🇯🇵', text: '日本市場分析', bg: '#FFF3CD', color: '#E67E22' },
+                    { icon: '🤖', text: 'AI価値予測', bg: '#E8F8F0', color: '#4CAF82' },
+                    { icon: '💰', text: 'AI参考価格', bg: '#FEF0E7', color: '#E74C3C' },
+                  ].map(tag => (
+                    <span key={tag.text} style={{
+                      fontSize: 12, fontWeight: 700,
+                      background: tag.bg, color: tag.color,
+                      padding: '5px 12px', borderRadius: 99
+                    }}>
+                      {tag.icon} {tag.text}
+                    </span>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* 統計カード */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 16 }}>
+            {[
+              { icon: '🚗', label: '登録車両数', value: `${vehicles.length}台`, color: '#4BA3D3', bg: '#E8F4FD' },
+              { icon: '🌍', label: '対象国数', value: '7カ国', color: '#4CAF82', bg: '#E8F8F0' },
+              { icon: '📅', label: '対象年代', value: '1930〜1990年', color: '#F5A623', bg: '#FFF3CD' },
+              { icon: '💴', label: '月額費用', value: '¥0（完全無料）', color: '#9B59B6', bg: '#F3E8FF' },
+            ].map(stat => (
+              <div key={stat.label} style={{
+                background: stat.bg,
+                borderRadius: 16,
+                padding: '16px',
+                textAlign: 'center'
+              }}>
+                <div style={{ fontSize: 28, marginBottom: 4 }}>{stat.icon}</div>
+                <div style={{ fontSize: 18, fontWeight: 900, color: stat.color }}>{stat.value}</div>
+                <div style={{ fontSize: 11, color: '#8BA4B5', marginTop: 2 }}>{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
           {/* 注意事項 */}
-          <div className="mt-4 bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-3 flex items-start gap-2">
-            <span className="text-yellow-400 text-sm shrink-0">⚠️</span>
-            <p className="text-xs text-gray-400">
-              AI・クルマんの評価・価格予測はAIによる参考情報です。実際の市場価値とは異なる場合があります。投資・購入判断には専門家への相談をお勧めします。
-            </p>
+          <div style={{
+            background: '#FFF9E6',
+            border: '1.5px solid #F5A623',
+            borderRadius: 12,
+            padding: '10px 16px',
+            fontSize: 11,
+            color: '#8B6914',
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 8
+          }}>
+            <span style={{ flexShrink: 0 }}>⚠️</span>
+            AI・クルマんの評価・価格予測はAIによる参考情報です。実際の市場価値とは異なる場合があります。投資・購入判断には専門家への相談をお勧めします。
           </div>
         </div>
-      </div>
 
-      {/* メインコンテンツ */}
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-white">🏆 評価指数ランキング</h2>
-          <span className="text-xs text-gray-500">毎日AM6:00更新</span>
+        {/* ランキングタイトル */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+          <h2 style={{ fontSize: 20, fontWeight: 900, color: '#2980B9', margin: 0 }}>
+            🏆 評価指数ランキング
+          </h2>
+          <span style={{ fontSize: 11, color: '#8BA4B5' }}>毎日AM6:00更新</span>
         </div>
+
         <SearchBox vehicles={vehicles} />
-        <p className="mt-8 text-center text-gray-600 text-xs">
+
+        <p style={{ textAlign: 'center', fontSize: 11, color: '#8BA4B5', marginTop: 32 }}>
           ⚠️ 本アプリは情報提供目的です。投資を推奨するものではありません。全スコア・価格はAI参考評価です。
         </p>
       </div>
