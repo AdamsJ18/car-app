@@ -45,7 +45,6 @@ function formatPrice(yen: number): string {
 export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
   const [query, setQuery] = useState('')
   const [selectedCountry, setSelectedCountry] = useState('')
-  const [selectedSteering, setSelectedSteering] = useState('')
 
   const countries = ['イタリア', '日本', 'ドイツ', 'イギリス', 'アメリカ', 'フランス', 'スウェーデン']
 
@@ -57,8 +56,7 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
       v.maker.toLowerCase().includes(q) ||
       v.country.toLowerCase().includes(q)
     const matchCountry = selectedCountry === '' || v.country === selectedCountry
-    const matchSteering = selectedSteering === '' || v.steering === selectedSteering
-    return matchQuery && matchCountry && matchSteering
+    return matchQuery && matchCountry
   })
 
   return (
@@ -85,18 +83,9 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
               <option key={c} value={c}>{countryFlag[c]} {c}</option>
             ))}
           </select>
-          <select
-            value={selectedSteering}
-            onChange={e => setSelectedSteering(e.target.value)}
-            className="bg-gray-900 text-white px-4 py-2.5 rounded-lg border border-gray-700 focus:border-[#C9A84C] focus:outline-none text-sm"
-          >
-            <option value="">🚗 全てのハンドル</option>
-            <option value="right">🔵 右ハンドル</option>
-            <option value="left">🟠 左ハンドル</option>
-          </select>
-          {(query || selectedCountry || selectedSteering) && (
+          {(query || selectedCountry) && (
             <button
-              onClick={() => { setQuery(''); setSelectedCountry(''); setSelectedSteering('') }}
+              onClick={() => { setQuery(''); setSelectedCountry('') }}
               className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2.5 rounded-lg text-sm transition-colors"
             >
               クリア
@@ -129,10 +118,6 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
                   <div className="flex-1 p-5">
                     <div className="flex items-center gap-2 flex-wrap">
                       <h3 className="text-lg font-bold text-white">{v.name_jp}</h3>
-                      {v.steering === 'right'
-                        ? <span className="text-xs bg-blue-900/50 text-blue-300 px-2 py-0.5 rounded-full">🔵 右ハンドル</span>
-                        : <span className="text-xs bg-orange-900/50 text-orange-300 px-2 py-0.5 rounded-full">🟠 左ハンドル</span>
-                      }
                       <span className="text-xs text-gray-500 ml-auto">詳細を見る →</span>
                     </div>
                     <div className="flex items-center gap-3 mt-1 text-sm text-gray-400">
