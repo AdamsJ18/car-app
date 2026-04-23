@@ -21,3 +21,4 @@ export default function CarImage({ imageUrl, name, fallbackEmoji }: { imageUrl: 
     />
   )
 }
+// cache bust 2026年 4月23日 木曜日 20時46分30秒 JST
