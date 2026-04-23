@@ -12,11 +12,9 @@ export default function CarImage({ imageUrl, name, fallbackEmoji }: { imageUrl: 
     )
   }
 
-  const proxyUrl = `/api/image?url=${encodeURIComponent(imageUrl)}`
-
   return (
     <img
-      src={proxyUrl}
+      src={imageUrl}
       alt={name}
       style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
       onError={() => setError(true)}
