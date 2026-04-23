@@ -11,44 +11,45 @@ type Vehicle = {
   total_score: number
 }
 
-const countryFlag: { [key: string]: string } = {
+const countryFlag: Record<string, string> = {
   'イタリア': '🇮🇹', '日本': '🇯🇵', 'ドイツ': '🇩🇪',
   'イギリス': '🇬🇧', 'アメリカ': '🇺🇸', 'フランス': '🇫🇷', 'スウェーデン': '🇸🇪'
 }
 
-const countryColors: { [key: string]: { bg: string; color: string; border: string } } = {
-  'イタリア': { bg: '#FFF0F0', color: '#E74C3C', border: '#FFCDD2' },
-  '日本': { bg: '#FFF0F5', color: '#E91E63', border: '#F8BBD0' },
-  'ドイツ': { bg: '#F0F4FF', color: '#3F51B5', border: '#C5CAE9' },
-  'イギリス': { bg: '#F0F8FF', color: '#2196F3', border: '#BBDEFB' },
-  'アメリカ': { bg: '#F0F4FF', color: '#1976D2', border: '#BBDEFB' },
-  'フランス': { bg: '#F5F0FF', color: '#673AB7', border: '#D1C4E9' },
-  'スウェーデン': { bg: '#FFFBF0', color: '#FF9800', border: '#FFE0B2' },
+const countryColors: Record<string, { bg: string; color: string }> = {
+  'イタリア': { bg: '#FFF0F0', color: '#E74C3C' },
+  '日本': { bg: '#FFF0F5', color: '#E91E63' },
+  'ドイツ': { bg: '#F0F4FF', color: '#3F51B5' },
+  'イギリス': { bg: '#F0F8FF', color: '#2196F3' },
+  'アメリカ': { bg: '#F0F4FF', color: '#1976D2' },
+  'フランス': { bg: '#F5F0FF', color: '#673AB7' },
+  'スウェーデン': { bg: '#FFFBF0', color: '#FF9800' },
 }
+
+const countries = ['日本', 'ドイツ', 'イタリア', 'イギリス', 'アメリカ', 'フランス', 'スウェーデン']
 
 export default function VehicleListModal({ vehicles, totalCount }: { vehicles: Vehicle[], totalCount: number }) {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
 
-  const countries = ['日本', 'ドイツ', 'イタリア', 'イギリス', 'アメリカ', 'フランス', 'スウェーデン']
-
-  const grouped: { [key: string]: Vehicle[] } = {}
-  countries.forEach(function(c) { grouped[c] = [] })
-  vehicles.forEach(function(v) {
-    if (grouped[v.country]) {
-      grouped[v.country].push(v)
-    } else {
-      grouped[v.country] = [v]
-    }
+  const grouped: Record<string, Vehicle[]> = {}
+  countries.forEach(c => { grouped[c] = [] })
+  vehicles.forEach(v => {
+    if (grouped[v.country]) grouped[v.country].push(v)
   })
 
-  const displayList = selectedCountry ? (grouped[selectedCountry] || []) : vehicles
+  const displayList = selectedCountry ? (grouped[selectedCountry] ?? []) : vehicles
+  const sorted = [...displayList].sort((a, b) => b.total_score - a.total_score)
 
   return (
     <>
       <button
-        onClick={function() { setIsOpen(true) }}
-        style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, padding: 0, width: '100%' }}
+        onClick={() => setIsOpen(true)}
+        style={{
+          background: 'none', border: 'none', cursor: 'pointer',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          gap: 4, padding: 0, width: '100%'
+        }}
       >
         <div style={{ fontSize: 28, marginBottom: 4 }}>🚗</div>
         <div style={{ fontSize: 22, fontWeight: 900, color: '#4BA3D3' }}>{totalCount}台</div>
@@ -60,10 +61,19 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
 
       {isOpen && (
         <div
-          onClick={function(e) { if (e.target === e.currentTarget) { setIsOpen(false) } }}
-          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(44,62,80,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, backdropFilter: 'blur(4px)' }}
+          onClick={e => { if (e.target === e.currentTarget) setIsOpen(false) }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 1000,
+            background: 'rgba(44,62,80,0.5)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: 20, backdropFilter: 'blur(4px)'
+          }}
         >
-          <div style={{ background: 'white', borderRadius: 24, width: '100%', maxWidth: 680, maxHeight: '85vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 60px rgba(44,62,80,0.3)' }}>
+          <div style={{
+            background: 'white', borderRadius: 24, width: '100%', maxWidth: 680,
+            maxHeight: '85vh', overflow: 'hidden', display: 'flex', flexDirection: 'column',
+            boxShadow: '0 20px 60px rgba(44,62,80,0.3)'
+          }}>
 
             <div style={{ padding: '20px 24px 16px', borderBottom: '2px solid #E8F4FD', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
@@ -71,8 +81,8 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
                 <p style={{ fontSize: 12, color: '#8BA4B5', margin: '4px 0 0' }}>全{totalCount}台 · 7カ国のクラシックカー</p>
               </div>
               <button
-                onClick={function() { setIsOpen(false) }}
-                style={{ background: '#F8FAFB', border: '2px solid #BAE0F7', borderRadius: 12, width: 36, height: 36, fontSize: 16, cursor: 'pointer', color: '#8BA4B5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}
+                onClick={() => setIsOpen(false)}
+                style={{ background: '#F8FAFB', border: '2px solid #BAE0F7', borderRadius: 12, width: 36, height: 36, fontSize: 16, cursor: 'pointer', color: '#8BA4B5', fontWeight: 700 }}
               >
                 ✕
               </button>
@@ -80,20 +90,20 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
 
             <div style={{ padding: '12px 24px', borderBottom: '2px solid #E8F4FD', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               <button
-                onClick={function() { setSelectedCountry(null) }}
+                onClick={() => setSelectedCountry(null)}
                 style={{ padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', background: selectedCountry === null ? '#4BA3D3' : '#F0F9FF', color: selectedCountry === null ? 'white' : '#8BA4B5' }}
               >
                 🌍 全て（{totalCount}台）
               </button>
-              {countries.map(function(c) {
-                const cc = countryColors[c] || { bg: '#F8FAFB', color: '#8BA4B5', border: '#E0E0E0' }
-                const count = grouped[c] ? grouped[c].length : 0
+              {countries.map(c => {
+                const cc = countryColors[c] ?? { bg: '#F8FAFB', color: '#8BA4B5' }
+                const count = grouped[c]?.length ?? 0
                 if (count === 0) return null
                 return (
                   <button
                     key={c}
-                    onClick={function() { setSelectedCountry(c) }}
-                    style={{ padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: '2px solid ' + (selectedCountry === c ? cc.color : cc.border), background: selectedCountry === c ? cc.color : cc.bg, color: selectedCountry === c ? 'white' : cc.color }}
+                    onClick={() => setSelectedCountry(c)}
+                    style={{ padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: '2px solid ' + cc.color + '40', background: selectedCountry === c ? cc.color : cc.bg, color: selectedCountry === c ? 'white' : cc.color }}
                   >
                     {countryFlag[c]} {c}（{count}台）
                   </button>
@@ -103,28 +113,21 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
 
             <div style={{ overflowY: 'auto', flex: 1, padding: '16px 24px' }}>
               {selectedCountry && (
-                <div style={{ marginBottom: 16, padding: '12px 16px', background: countryColors[selectedCountry] ? countryColors[selectedCountry].bg : '#F8FAFB', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ marginBottom: 16, padding: '12px 16px', background: countryColors[selectedCountry]?.bg ?? '#F8FAFB', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 10 }}>
                   <span style={{ fontSize: 28 }}>{countryFlag[selectedCountry]}</span>
                   <div>
-                    <p style={{ fontSize: 16, fontWeight: 900, color: countryColors[selectedCountry] ? countryColors[selectedCountry].color : '#333', margin: 0 }}>{selectedCountry}の名車</p>
-                    <p style={{ fontSize: 12, color: '#8BA4B5', margin: 0 }}>{grouped[selectedCountry] ? grouped[selectedCountry].length : 0}台登録</p>
+                    <p style={{ fontSize: 16, fontWeight: 900, color: countryColors[selectedCountry]?.color ?? '#333', margin: 0 }}>{selectedCountry}の名車</p>
+                    <p style={{ fontSize: 12, color: '#8BA4B5', margin: 0 }}>{grouped[selectedCountry]?.length ?? 0}台登録</p>
                   </div>
                 </div>
               )}
 
               <div style={{ display: 'grid', gap: 8 }}>
-                {displayList.slice().sort(function(a, b) { return b.total_score - a.total_score }).map(function(v, i) {
-                  const cc = countryColors[v.country] || { bg: '#F8FAFB', color: '#8BA4B5', border: '#E0E0E0' }
+                {sorted.map((v, i) => {
+                  const cc = countryColors[v.country] ?? { bg: '#F8FAFB', color: '#8BA4B5' }
                   return (
-                    
-                      key={v.id}
-                      href={'/vehicle/' + v.id}
-                      style={{ textDecoration: 'none' }}
-                      onClick={function() { setIsOpen(false) }}
-                    >
-                      <div
-                        style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#FAFCFF', borderRadius: 12, border: '1.5px solid #E8F4FD', cursor: 'pointer' }}
-                      >
+                    <a key={v.id} href={'/vehicle/' + v.id} style={{ textDecoration: 'none' }} onClick={() => setIsOpen(false)}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#FAFCFF', borderRadius: 12, border: '1.5px solid #E8F4FD', cursor: 'pointer' }}>
                         <div style={{ width: 28, height: 28, borderRadius: '50%', background: cc.bg, color: cc.color, fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           {i + 1}
                         </div>
