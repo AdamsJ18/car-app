@@ -75,11 +75,11 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
             </div>
 
             {/* 国別タブ（横スクロール） */}
-            <div style={{ flexShrink: 0, borderBottom: '2px solid #E8F4FD' }}>
-              <div style={{ display: 'flex', gap: 8, padding: '10px 16px', overflowX: 'auto', WebkitOverflowScrolling: 'touch' as any }}>
+            <div style={{ flexShrink: 0, borderBottom: '2px solid #E8F4FD', overflowX: 'auto', overflowY: 'hidden' }}>
+              <div style={{ display: 'flex', gap: 8, padding: '10px 16px', width: 'max-content' }}>
                 <button
                   onClick={() => setSelectedCountry(null)}
-                  style={{ padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', whiteSpace: 'nowrap', flexShrink: 0, background: selectedCountry === null ? '#4BA3D3' : '#F0F9FF', color: selectedCountry === null ? 'white' : '#8BA4B5' }}
+                  style={{ padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', whiteSpace: 'nowrap', background: selectedCountry === null ? '#4BA3D3' : '#F0F9FF', color: selectedCountry === null ? 'white' : '#8BA4B5' }}
                 >
                   🌍 全て {totalCount}台
                 </button>
@@ -91,7 +91,7 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
                     <button
                       key={c}
                       onClick={() => setSelectedCountry(c)}
-                      style={{ padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: '2px solid ' + cc.color + '40', whiteSpace: 'nowrap', flexShrink: 0, background: selectedCountry === c ? cc.color : cc.bg, color: selectedCountry === c ? 'white' : cc.color }}
+                      style={{ padding: '6px 14px', borderRadius: 99, fontSize: 12, fontWeight: 700, cursor: 'pointer', border: '2px solid ' + cc.color + '40', whiteSpace: 'nowrap', background: selectedCountry === c ? cc.color : cc.bg, color: selectedCountry === c ? 'white' : cc.color }}
                     >
                       {countryFlag[c]} {c} {count}台
                     </button>
@@ -102,33 +102,50 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
 
             {/* 選択中の国の情報 */}
             {selectedCountry && selectedCC && (
-              <div style={{ padding: '10px 16px', background: selectedCC.bg, borderBottom: '1px solid ' + selectedCC.color + '20', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 20 }}>{countryFlag[selectedCountry]}</span>
-                <span style={{ fontSize: 14, fontWeight: 900, color: selectedCC.color }}>{selectedCountry}の名車</span>
-                <span style={{ fontSize: 12, color: '#8BA4B5' }}>{grouped[selectedCountry]?.length ?? 0}台</span>
+              <div style={{ padding: '8px 16px', background: selectedCC.bg, borderBottom: '1px solid ' + selectedCC.color + '20', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 18 }}>{countryFlag[selectedCountry]}</span>
+                <span style={{ fontSize: 13, fontWeight: 900, color: selectedCC.color }}>{selectedCountry}の名車</span>
+                <span style={{ fontSize: 11, color: '#8BA4B5' }}>{grouped[selectedCountry]?.length ?? 0}台</span>
               </div>
             )}
 
             {/* 車両リスト */}
             <div style={{ overflowY: 'auto', flex: 1, padding: '12px 16px' }}>
-              <div style={{ display: 'grid', gap: 8 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {sorted.map((v, i) => {
                   const cc = countryColors[v.country] ?? { bg: '#F8FAFB', color: '#8BA4B5' }
                   return (
-                    <a key={v.id} href={'/vehicle/' + v.id} style={{ textDecoration: 'none' }} onClick={() => setIsOpen(false)}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: '#FAFCFF', borderRadius: 14, border: '1.5px solid #E8F4FD', cursor: 'pointer' }}>
-                        <div style={{ width: 26, height: 26, borderRadius: '50%', background: cc.bg, color: cc.color, fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <a key={v.id} href={'/vehicle/' + v.id} style={{ textDecoration: 'none', display: 'block' }} onClick={() => setIsOpen(false)}>
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: '32px 24px 1fr auto auto',
+                        alignItems: 'center',
+                        gap: 10,
+                        padding: '12px 14px',
+                        background: '#FAFCFF',
+                        borderRadius: 14,
+                        border: '1.5px solid #E8F4FD',
+                        cursor: 'pointer',
+                        width: '100%',
+                        boxSizing: 'border-box'
+                      }}>
+                        {/* 順位 */}
+                        <div style={{ width: 28, height: 28, borderRadius: '50%', background: cc.bg, color: cc.color, fontSize: 11, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           {i + 1}
                         </div>
-                        <span style={{ fontSize: 16, flexShrink: 0 }}>{countryFlag[v.country]}</span>
-                        <div style={{ flex: 1, minWidth: 0 }}>
+                        {/* 国旗 */}
+                        <span style={{ fontSize: 16, textAlign: 'center' }}>{countryFlag[v.country]}</span>
+                        {/* 車名 */}
+                        <div style={{ minWidth: 0 }}>
                           <p style={{ fontSize: 14, fontWeight: 800, color: '#2C3E50', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v.name_jp}</p>
                           <p style={{ fontSize: 11, color: '#8BA4B5', margin: 0 }}>{v.maker} · {v.year_start}〜{v.year_end}年</p>
                         </div>
-                        <div style={{ background: cc.bg, color: cc.color, padding: '3px 10px', borderRadius: 99, fontSize: 13, fontWeight: 900, flexShrink: 0 }}>
+                        {/* スコア */}
+                        <div style={{ background: cc.bg, color: cc.color, padding: '3px 10px', borderRadius: 99, fontSize: 12, fontWeight: 900, whiteSpace: 'nowrap' }}>
                           {v.total_score}点
                         </div>
-                        <span style={{ fontSize: 12, color: '#4BA3D3', flexShrink: 0 }}>→</span>
+                        {/* 矢印 */}
+                        <span style={{ fontSize: 12, color: '#4BA3D3' }}>→</span>
                       </div>
                     </a>
                   )
