@@ -6,7 +6,11 @@ export async function GET(request: NextRequest) {
 
   try {
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 CARApp/1.0' }
+      headers: {
+        'User-Agent': 'CARApp/1.0 (https://car-app-chi-eight.vercel.app; contact@example.com) Node.js',
+        'Referer': 'https://en.wikipedia.org/',
+        'Accept': 'image/webp,image/jpeg,image/*',
+      }
     })
     if (!res.ok) return NextResponse.json({ error: 'fetch failed' }, { status: 404 })
 
