@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import CarImage from './CarImage'
 
 type Vehicle = {
   id: string
@@ -68,7 +69,6 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
   const [query, setQuery] = useState('')
   const [selectedCountry, setSelectedCountry] = useState('')
   const [sortKey, setSortKey] = useState<SortKey>('total_score')
-  const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({})
 
   const countries = ['イタリア', '日本', 'ドイツ', 'イギリス', 'アメリカ', 'フランス', 'スウェーデン']
 
@@ -113,9 +113,7 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
             {sortOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
           </select>
           {(query || selectedCountry) && (
-            <button onClick={() => { setQuery(''); setSelectedCountry('') }} style={{ background: '#F8FAFB', border: '2px solid #BAE0F7', borderRadius: 12, padding: '10px 14px', fontSize: 13, color: '#8BA4B5', fontWeight: 700, cursor: 'pointer' }}>
-              ✕
-            </button>
+            <button onClick={() => { setQuery(''); setSelectedCountry('') }} style={{ background: '#F8FAFB', border: '2px solid #BAE0F7', borderRadius: 12, padding: '10px 14px', fontSize: 13, color: '#8BA4B5', fontWeight: 700, cursor: 'pointer' }}>✕</button>
           )}
         </div>
         <p style={{ fontSize: 12, color: '#8BA4B5', marginTop: 8, marginBottom: 0 }}>
@@ -134,28 +132,18 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {sorted.map((v, i) => {
             const cc = countryColors[v.country] || { bg: '#F8FAFB', color: '#8BA4B5' }
-            const showImg = v.image_url && !imgErrors[v.id]
             return (
               <a key={v.id} href={`/vehicle/${v.id}`} style={{ textDecoration: 'none', display: 'block' }}>
-                <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', boxShadow: '0 4px 16px rgba(75,163,211,0.10)', display: 'flex', cursor: 'pointer', transition: 'all 0.2s' }}>
+                <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', boxShadow: '0 4px 16px rgba(75,163,211,0.10)', display: 'flex', cursor: 'pointer' }}>
 
                   {/* 左：画像エリア */}
-                  <div style={{ width: 120, flexShrink: 0, position: 'relative', background: cc.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', minHeight: 110 }}>
-                    {showImg ? (
-                      <img
-                        src={v.image_url!}
-                        alt={v.name_jp}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }}
-                        onError={() => setImgErrors(prev => ({ ...prev, [v.id]: true }))}
-                      />
-                    ) : (
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                        <span style={{ fontSize: 32 }}>{countryFlag[v.country] || '🌍'}</span>
-                        <span style={{ fontSize: 11, color: cc.color, fontWeight: 700 }}>🚗</span>
-                      </div>
-                    )}
-                    {/* 順位バッジ */}
-                    <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(255,255,255,0.9)', borderRadius: 99, width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900, color: cc.color, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}>
+                  <div style={{ width: 120, flexShrink: 0, position: 'relative', background: cc.bg, minHeight: 110, overflow: 'hidden' }}>
+                    <CarImage
+                      imageUrl={v.image_url}
+                      name={v.name_jp}
+                      fallbackEmoji={countryFlag[v.country] || '🚗'}
+                    />
+                    <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(255,255,255,0.92)', borderRadius: 99, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900, color: cc.color, boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}>
                       {i + 1}
                     </div>
                   </div>
