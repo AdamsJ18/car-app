@@ -7,9 +7,8 @@ export default function CarImage({ imageUrl, name, fallbackEmoji }: { imageUrl: 
 
   useEffect(() => {
     if (!imageUrl) return
-    // Wikipedia APIのURLの場合はfetchしてsourceを取得
-    if (imageUrl.includes('wikipedia.org/w/api.php')) {
-      fetch(imageUrl)
+    if (imageUrl.includes('api.php')) {
+      fetch(imageUrl + '&origin=*')
         .then(r => r.json())
         .then(data => {
           const pages = data?.query?.pages
