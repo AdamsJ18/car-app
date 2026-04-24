@@ -91,6 +91,7 @@ export default async function VehiclePage({ params }: { params: Promise<{ id: st
                 <h2 style={{ fontSize: 20, fontWeight: 900, color: '#2C3E50', margin: 0, wordBreak: 'break-word' }}>{v.name_jp}</h2>
               </div>
               <p style={{ fontSize: 12, color: '#8BA4B5', margin: '0 0 4px' }}>{v.name_en}</p>
+              {v.wikipedia_url && <a href={v.wikipedia_url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: '#4BA3D3', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 4 }}>🖼️ 車両参考画像</a>}
               <p style={{ fontSize: 12, color: '#8BA4B5', margin: 0 }}>{v.maker} · {v.country} · {v.year_start}〜{v.year_end}年</p>
             </div>
             <div style={{ textAlign: 'center', background: cc.bg, borderRadius: 16, padding: '12px 16px', flexShrink: 0 }}>
