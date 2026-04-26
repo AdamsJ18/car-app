@@ -153,7 +153,7 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
                       <div style={{ minWidth: 0 }}>
                         <h3 style={{ fontSize: 15, fontWeight: 900, color: '#2C3E50', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v.name_jp}</h3>
-                        <p style={{ fontSize: 11, color: '#8BA4B5', margin: '2px 0 0' }}>{v.maker} · {v.country} · {v.year_start}〜{v.year_end}年</p>
+                        <p style={{ fontSize: 11, color: '#8BA4B5', margin: '2px 0 0' }}><span style={{ marginRight: '4px' }}>{countryFlag[v.country] || '🌍'}</span>{v.maker} · {v.country} · {v.year_start}〜{v.year_end}年</p>
                       </div>
                       <span style={{ fontSize: 11, color: '#4BA3D3', background: '#E8F4FD', padding: '3px 10px', borderRadius: 99, flexShrink: 0, fontWeight: 700 }}>詳細→</span>
                     </div>
