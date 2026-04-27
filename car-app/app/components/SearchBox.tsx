@@ -131,7 +131,7 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {sorted.map((v, i) => {
-            const cc = countryColors[v.country] || { bg: '#F8FAFB', color: '#8BA4B5' }
+            const cc = { bg: '#F8FAFB', color: '#8BA4B5' }
             return (
               <a key={v.id} href={`/vehicle/${v.id}`} style={{ textDecoration: 'none', display: 'block' }}>
                 <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', boxShadow: '0 4px 16px rgba(75,163,211,0.10)', display: 'flex', cursor: 'pointer' }}>
