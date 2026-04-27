@@ -141,8 +141,11 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
                     <CarImage
                       imageUrl={v.image_url}
                       name={v.name_jp}
-                      fallbackEmoji={countryFlag[v.country] || '🚗'}
+                      fallbackEmoji={'🚗'}
                     />
+              <div style={{ position: 'absolute', bottom: 6, left: 6, fontSize: 22, lineHeight: 1, pointerEvents: 'none' }}>
+                {countryFlag[v.country?.trim()] || ''}
+              </div>
                     <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(255,255,255,0.92)', borderRadius: 99, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900, color: cc.color, boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}>
                       {i + 1}
                     </div>
