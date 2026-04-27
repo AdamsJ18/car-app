@@ -143,9 +143,6 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
                       name={v.name_jp}
                       fallbackEmoji={'🚗'}
                     />
-              <div style={{ position: 'absolute', bottom: 6, left: 6, fontSize: 22, lineHeight: 1, pointerEvents: 'none' }}>
-                {countryFlag[v.country?.trim()] || ''}
-              </div>
                     <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(255,255,255,0.92)', borderRadius: 99, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900, color: cc.color, boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}>
                       {i + 1}
                     </div>
@@ -156,7 +153,7 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
                       <div style={{ minWidth: 0 }}>
                         <h3 style={{ fontSize: 15, fontWeight: 900, color: '#2C3E50', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v.name_jp}</h3>
-                        <p style={{ fontSize: 11, color: '#8BA4B5', margin: '2px 0 0' }}><span style={{ marginRight: '4px' }}>{countryFlag[v.country?.trim()] || '🌍'}</span>{v.maker} · {v.country} · {v.year_start}〜{v.year_end}年</p>
+                        <p style={{ fontSize: 11, color: '#8BA4B5', margin: '2px 0 0' }}>{v.maker} · {v.country} · {v.year_start}〜{v.year_end}年</p>
                       </div>
                       <span style={{ fontSize: 11, color: '#4BA3D3', background: '#E8F4FD', padding: '3px 10px', borderRadius: 99, flexShrink: 0, fontWeight: 700 }}>詳細→</span>
                     </div>
