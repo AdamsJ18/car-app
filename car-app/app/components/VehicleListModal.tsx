@@ -9,6 +9,7 @@ type Vehicle = {
   year_start: number
   year_end: number
   total_score: number
+  wikipedia_url?: string
 }
 
 const countryFlag: Record<string, string> = {
@@ -103,7 +104,7 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
             {/* 選択中の国の情報 */}
             {selectedCountry && selectedCC && (
               <div style={{ padding: '8px 16px', background: selectedCC.bg, borderBottom: '1px solid ' + selectedCC.color + '20', flexShrink: 0, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 18 }}>{countryFlag[selectedCountry]}</span>
+                <span style={{ fontSize: 18 }}>{countryFlag[selectedCountry?.trim()]}</span>
                 <span style={{ fontSize: 13, fontWeight: 900, color: selectedCC.color }}>{selectedCountry}の名車</span>
                 <span style={{ fontSize: 11, color: '#8BA4B5' }}>{grouped[selectedCountry]?.length ?? 0}台</span>
               </div>
@@ -134,13 +135,15 @@ export default function VehicleListModal({ vehicles, totalCount }: { vehicles: V
                           {i + 1}
                         </div>
                         {/* 国旗 */}
-                        <span style={{ fontSize: 16, textAlign: 'center' }}>{countryFlag[v.country]}</span>
+                        <span style={{ fontSize: 16, textAlign: 'center' }}>{countryFlag[v.country?.trim()]}</span>
                         {/* 車名 */}
                         <div style={{ minWidth: 0 }}>
                           <p style={{ fontSize: 14, fontWeight: 800, color: '#2C3E50', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{v.name_jp}</p>
                           <p style={{ fontSize: 11, color: '#8BA4B5', margin: 0 }}>{v.maker} · {v.year_start}〜{v.year_end}年</p>
                         </div>
-                        {/* スコア */}
+                        {/* 車両参考画像 */}
+                {v.wikipedia_url && <a href={v.wikipedia_url} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ fontSize: 11, color: '#4BA3D3', textDecoration: 'none' }}>🖼️ 車両参考画像</a>}
+                {/* スコア */}
                         <div style={{ background: cc.bg, color: cc.color, padding: '3px 10px', borderRadius: 99, fontSize: 12, fontWeight: 900, whiteSpace: 'nowrap' }}>
                           {v.total_score}点
                         </div>
