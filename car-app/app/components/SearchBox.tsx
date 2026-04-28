@@ -137,13 +137,13 @@ export default function SearchBox({ vehicles }: { vehicles: Vehicle[] }) {
                 <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', boxShadow: '0 4px 16px rgba(75,163,211,0.10)', display: 'flex', cursor: 'pointer' }}>
 
                   {/* 左：画像エリア */}
-                  <div style={{ width: 120, flexShrink: 0, position: 'relative', background: cc.bg, minHeight: 110, overflow: 'hidden' }}>
+                  <div style={{ width: 120, flexShrink: 0, position: 'relative', background: '#F8FAFB', minHeight: 110, overflow: 'hidden' }}>
                     <CarImage
                       imageUrl={v.image_url}
                       name={v.name_jp}
                       fallbackEmoji={''}
                     />
-                    <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(255,255,255,0.92)', borderRadius: 99, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900, color: cc.color, boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}>
+                    <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(255,255,255,0.92)', borderRadius: 99, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11, fontWeight: 900, color: '#8BA4B5', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}>
                       {i + 1}
                     </div>
                   </div>
