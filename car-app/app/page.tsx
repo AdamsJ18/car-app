@@ -5,13 +5,18 @@ import SearchBox from './components/SearchBox'
 import VehicleListModal from './components/VehicleListModal'
 
 async function getVehicles() {
-  const { data, error } = await supabase
-    .from('vehicles')
-    .select('*')
-    .order('total_score', { ascending: false })
-    .limit(1000)
-  if (error) { console.error(error); return [] }
-  return data
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/vehicles?select=*&order=total_score.desc&limit=1000`,
+    {
+      headers: {
+        apikey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+      },
+      cache: 'no-store',
+    }
+  )
+  if (!res.ok) return []
+  return res.json()
 }
 
 export default async function Home() {
