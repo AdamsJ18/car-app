@@ -1,4 +1,6 @@
 import { supabase } from '@/lib/supabase'
+
+export const revalidate = 0
 import SearchBox from './components/SearchBox'
 import VehicleListModal from './components/VehicleListModal'
 
