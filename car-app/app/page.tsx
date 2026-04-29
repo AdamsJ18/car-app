@@ -9,6 +9,7 @@ async function getVehicles() {
     .from('vehicles')
     .select('*')
     .order('total_score', { ascending: false })
+    .limit(1000)
   if (error) { console.error(error); return [] }
   return data
 }
